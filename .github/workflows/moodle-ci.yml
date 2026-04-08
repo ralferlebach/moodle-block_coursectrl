@@ -2,24 +2,27 @@
 # GitHub Actions CI – block_coursectrl (Course Control Hub block)
 #
 # Matrix:
-#   Moodle:  4.5, 5.0, 5.1, 5.2*
+#   Moodle:  4.5, 5.0, 5.1
 #   PHP:     8.2, 8.3, 8.4  (8.4 excluded for Moodle < 5.1)
 #   DB:      MariaDB 10.11  |  PostgreSQL 16
 #
-# * MOODLE_502_STABLE: branch expected ~May 2026.
+# Moodle 5.2 (MOODLE_502_STABLE) wird ergänzt, sobald der Branch
+# im moodle/moodle-Repository verfügbar ist (~Mai 2026).
 #
-# Dependency:
-#   block_coursectrl requires local_coursectrl. It is pulled in via
-#   moodle-plugin-ci add-plugin before install.
+# Abhängigkeit:
+#   block_coursectrl benötigt local_coursectrl. Das Repo wird via
+#   moodle-plugin-ci add-plugin eingebunden.
 #
-#   ⚠ Replace YOUR_GITHUB_ORG with the actual GitHub organisation/user
-#     that owns the local_coursectrl repository.
+#   Konfiguration: GitHub Repository Variable setzen:
+#     Settings → Secrets and variables → Actions → Variables
+#     Name:  CCH_CORE_REPO
+#     Value: dein-github-username/local_coursectrl
 #
-# Job parallelism:
+# Job-Parallelität:
 #   lint-php ──┐
-#              ├──► phpunit  (MariaDB + PostgreSQL, parallel to behat)
+#              ├──► phpunit  (MariaDB + PostgreSQL)
 #   lint-js  ──┘
-#              └──► behat    (MariaDB only, parallel to phpunit)
+#              └──► behat    (MariaDB only, parallel zu phpunit)
 ##############################################################################
 
 name: Moodle Plugin CI
@@ -31,8 +34,7 @@ on:
 
 env:
   MOODLE_CI: '^4'
-  # ↓ Set this to the GitHub org/user owning local_coursectrl.
-  CCH_CORE_REPO: 'YOUR_GITHUB_ORG/local_coursectrl'
+  CCH_CORE_REPO: ${{ vars.CCH_CORE_REPO }}
   CCH_CORE_BRANCH: 'main'
 
 jobs:
@@ -159,7 +161,6 @@ jobs:
           - MOODLE_405_STABLE
           - MOODLE_500_STABLE
           - MOODLE_501_STABLE
-          - MOODLE_502_STABLE
         php: ['8.2', '8.3', '8.4']
         db:
           - { engine: mariadb, type: mariadb, port: 3306, user: root,   pass: root   }
@@ -243,7 +244,7 @@ jobs:
   behat:
     name: "Behat (${{ matrix.moodle }} / PHP 8.2 / Chrome)"
     runs-on: ubuntu-24.04
-    needs: [lint-php, lint-js]   # parallel to phpunit
+    needs: [lint-php, lint-js]
     strategy:
       fail-fast: false
       matrix:
@@ -251,7 +252,6 @@ jobs:
           - MOODLE_405_STABLE
           - MOODLE_500_STABLE
           - MOODLE_501_STABLE
-          - MOODLE_502_STABLE
 
     services:
       selenium:
