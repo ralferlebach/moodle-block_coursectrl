@@ -26,13 +26,10 @@
 
 namespace block_coursectrl;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Smoke test suite for the block_coursectrl plugin skeleton.
  */
 class stub_test extends \advanced_testcase {
-
     /**
      * Verify the plugin version is recorded after installation.
      */
@@ -42,10 +39,10 @@ class stub_test extends \advanced_testcase {
     }
 
     /**
-     * Verify the block class can be instantiated.
+     * Verify the block class exists and is loadable.
      */
-    public function test_block_class_instantiates(): void {
-        $this->assertClassExists('\block_coursectrl');
+    public function test_block_class_exists(): void {
+        $this->assertTrue(class_exists('block_coursectrl'));
     }
 
     /**

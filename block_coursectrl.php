@@ -25,13 +25,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Course Control Hub block – renders a launch link into local_coursectrl.
  */
 class block_coursectrl extends block_base {
-
     /**
      * Initialise block title.
      */
@@ -40,7 +37,7 @@ class block_coursectrl extends block_base {
     }
 
     /**
-     * This block is only meaningful inside a course.
+     * This block is only meaningful inside a course view.
      *
      * @return array
      */
@@ -71,19 +68,17 @@ class block_coursectrl extends block_base {
             return $this->content;
         }
 
-        $this->content = new stdClass();
+        $this->content         = new stdClass();
         $this->content->footer = '';
 
-        $context = $this->context;
-
-        // Only show to users who can actually use the hub.
-        if (!has_capability('local/coursectrl:view', $context)) {
+        if (!has_capability('local/coursectrl:view', $this->context)) {
             $this->content->text = '';
             return $this->content;
         }
 
-        $courseid = $this->page->course->id;
-        $url      = new moodle_url('/local/coursectrl/index.php', ['courseid' => $courseid]);
+        $url = new moodle_url('/local/coursectrl/index.php', [
+            'courseid' => $this->page->course->id,
+        ]);
 
         $this->content->text = html_writer::link(
             $url,
