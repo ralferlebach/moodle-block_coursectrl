@@ -34,7 +34,8 @@ on:
 
 env:
   MOODLE_CI: '^4'
-  CCH_CORE_REPO: 'ralferlebach/moodle-local_coursectrl'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  CCH_CORE_REPO: ${{ vars.CCH_CORE_REPO }}
   CCH_CORE_BRANCH: 'main'
 
 jobs:
@@ -67,9 +68,6 @@ jobs:
 
       - name: PHP CodeSniffer (Moodle coding style)
         run: moodle-plugin-ci phpcs plugin
-
-      - name: PHP Copy/Paste Detector
-        run: moodle-plugin-ci phpcpd plugin || true
 
       - name: PHP Mess Detector
         run: moodle-plugin-ci phpmd plugin || true
