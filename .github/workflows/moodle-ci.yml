@@ -34,7 +34,7 @@ on:
 
 env:
   MOODLE_CI: '^4'
-  CCH_CORE_REPO: ${{ vars.CCH_CORE_REPO }}
+  CCH_CORE_REPO: 'ralferlebach/moodle-local_coursectrl'
   CCH_CORE_BRANCH: 'main'
 
 jobs:
@@ -124,6 +124,7 @@ jobs:
           echo "TRAVIS_BRANCH=${BRANCH_NAME:-main}" >> "$GITHUB_ENV"
 
       - name: Register local_coursectrl dependency
+        if: ${{ env.CCH_CORE_REPO != '' }}
         run: moodle-plugin-ci add-plugin --branch ${{ env.CCH_CORE_BRANCH }} ${{ env.CCH_CORE_REPO }}
 
       - name: Install Moodle (grunt config baseline – 4.5)
@@ -223,6 +224,7 @@ jobs:
           echo "TRAVIS_BRANCH=${BRANCH_NAME:-main}" >> "$GITHUB_ENV"
 
       - name: Register local_coursectrl dependency
+        if: ${{ env.CCH_CORE_REPO != '' }}
         run: moodle-plugin-ci add-plugin --branch ${{ env.CCH_CORE_BRANCH }} ${{ env.CCH_CORE_REPO }}
 
       - name: Install Moodle ${{ matrix.moodle }}
@@ -302,6 +304,7 @@ jobs:
           echo "TRAVIS_BRANCH=${BRANCH_NAME:-main}" >> "$GITHUB_ENV"
 
       - name: Register local_coursectrl dependency
+        if: ${{ env.CCH_CORE_REPO != '' }}
         run: moodle-plugin-ci add-plugin --branch ${{ env.CCH_CORE_BRANCH }} ${{ env.CCH_CORE_REPO }}
 
       - name: Install Moodle ${{ matrix.moodle }}
