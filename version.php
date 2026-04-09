@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'block_coursectrl';
-$plugin->version      = 2026040801;
+$plugin->version      = 2026040802;
 $plugin->requires     = 2024042200; // Moodle 4.5.
 $plugin->dependencies = [
-    'local_coursectrl' => 2026040801,
+    'local_coursectrl' => 2026040802,
 ];
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release  = '0.1.0';
